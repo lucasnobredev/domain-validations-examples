@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DomainValidationExamples.Domain;
 using DomainValidationExamples.DTOs;
 using DomainValidationExamples.Repositories;
 using DomainValidationExamples.Validations;
@@ -39,6 +40,35 @@ namespace DomainValidationExamples.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        public IActionResult PostWithValidationInDomain([FromBody] OrderRequest request)
+        {
+            var order = Order.CreateOrder(request);
+
+            if(order.IsValid() == false)
+            {
+                return BadRequest();
+            }
+
+            _orderRepository.Save(order);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult PostWithValidationInConstructionOfDomain([FromBody] OrderRequest request)
+        {
+            if (Order.CanCreateOrder(request, out Order order) == false)
+            {
+                return BadRequest();
+            }
+
+            _orderRepository.Save(order);
+
+            return Ok();
+        }
+
 
         private object MapOrderByRequest(object request)
         {

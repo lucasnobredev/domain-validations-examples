@@ -8,6 +8,12 @@ namespace DomainValidationExamples.Domain
 {
     public class Order
     {
+
+        public bool IsValid()
+        {
+            return false;
+        }
+
         public static Order CreateOrder(OrderViewModel orderViewModel)
         {
             return new Order();
@@ -20,9 +26,17 @@ namespace DomainValidationExamples.Domain
             return true;
         }
 
-        public bool IsValid()
+        public static Order CreateOrder(OrderRequest request)
         {
-            return false;
+            return new Order();
         }
+
+        public static bool CanCreateOrder(OrderRequest orderViewModel, out Order order)
+        {
+            order = new Order();
+
+            return true;
+        }
+
     }
 }
