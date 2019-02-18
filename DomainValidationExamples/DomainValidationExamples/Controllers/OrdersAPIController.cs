@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DomainValidationExamples.DTOs;
+using DomainValidationExamples.Repositories;
 using DomainValidationExamples.Validations;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,24 +14,35 @@ namespace DomainValidationExamples.Controllers
     public class OrdersAPIController : ControllerBase
     {
         private readonly IOrderValidation _orderValidation;
+        private readonly IOrderRepository _orderRepository;
 
         public OrdersAPIController(
-            IOrderValidation orderValidation)
+            IOrderValidation orderValidation,
+            IOrderRepository orderRepository)
         {
             _orderValidation = orderValidation;
+            _orderRepository = orderRepository;
         }
 
         // POST api/values
         [HttpPost]
-        public IActionResult Post([FromBody] string value)
+        public IActionResult Post([FromBody] OrderRequest request)
         {
-            //if(OrderRequestIsValid(value))
-            if (!_orderValidation.IsValid(value, out List<string> errors))
+            if (_orderValidation.IsValid(request, out List<string> errors) == false)
             {
                 return BadRequest(errors);
             }
 
+            var order = MapOrderByRequest(request);
+
+            _orderRepository.Save(order);
+
             return Ok();
+        }
+
+        private object MapOrderByRequest(object request)
+        {
+            throw new NotImplementedException();
         }
 
 

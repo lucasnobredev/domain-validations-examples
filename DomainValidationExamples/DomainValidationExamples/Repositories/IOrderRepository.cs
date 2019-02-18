@@ -7,6 +7,6 @@ namespace DomainValidationExamples.Repositories
 {
     public interface IOrderRepository
     {
-        void Save();
+        void Save(object order);
     }
 }
