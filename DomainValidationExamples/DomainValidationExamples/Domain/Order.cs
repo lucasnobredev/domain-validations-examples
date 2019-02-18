@@ -13,6 +13,13 @@ namespace DomainValidationExamples.Domain
             return new Order();
         }
 
+        public static bool CanCreateOrder(OrderViewModel orderViewModel, out Order order)
+        {
+            order = new Order();
+
+            return true;
+        }
+
         public bool IsValid()
         {
             return false;

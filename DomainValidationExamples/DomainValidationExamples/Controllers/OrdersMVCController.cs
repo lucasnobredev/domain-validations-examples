@@ -71,15 +71,18 @@ namespace DomainValidationExamples.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult IndexWithValidationInConstructionOfDomain(OrderViewModel request)
-        //{
-        //    var order = MapOrderByRequest(request);
-        //    
-        //    _orderRepository.Save(order);
-        //
-        //    return View();
-        //}
+        [HttpPost]
+        public IActionResult IndexWithValidationInConstructionOfDomain(OrderViewModel request)
+        {
+            if(Order.CanCreateOrder(request, out Order order) == false)
+            {
+                return View();
+            }
+            
+            _orderRepository.Save(order);
+        
+            return View();
+        }
 
         private Order MapOrderByRequest(object request)
         {
